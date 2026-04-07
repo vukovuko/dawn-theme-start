@@ -52,7 +52,18 @@
     "product_card_carousel_rarMV7": {
       "type": "product-card-carousel",
       "name": "t:sections.product-card-carousel.presets.name",
-      "settings": {}
+      "settings": {
+        "title": "The New Expression",
+        "heading_alignment": "center",
+        "products": [
+          "boots",
+          "jumper",
+          "dress",
+          "boots-2"
+        ],
+        "padding_top": 40,
+        "padding_bottom": 140
+      }
     }
   },
   "order": [
