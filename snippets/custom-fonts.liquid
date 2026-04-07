@@ -1,0 +1,20 @@
+{{ 'FreightBigProBook-Regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'Pragmatica.ttf' | asset_url | preload_tag: as: 'font', type: 'font/ttf', crossorigin: 'anonymous' }}
+
+<style>
+  @font-face {
+    font-family: 'FreightBigPro';
+    src: url('{{ "FreightBigProBook-Regular.woff2" | asset_url }}') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Pragmatica';
+    src: url('{{ "Pragmatica.ttf" | asset_url }}') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
