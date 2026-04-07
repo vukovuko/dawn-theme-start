@@ -2848,6 +2848,12 @@
         }
       }
     },
+    "product-card-carousel": {
+      "name": "Product card carousel",
+      "presets": {
+        "name": "Product card carousel"
+      }
+    },
     "rich-text": {
       "name": "Rich text",
       "settings": {
