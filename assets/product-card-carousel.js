@@ -8,6 +8,9 @@ if (!customElements.get('product-card-carousel')) {
       }
 
       connectedCallback() {
+        const img = this.querySelector('.card-product-carousel__image');
+        if (img) this.defaultImageSrc = img.src;
+
         this.addEventListener('click', this.handleClick.bind(this));
 
         this.querySelectorAll('.card-product-carousel__swatch input').forEach((input) => {
@@ -35,8 +38,8 @@ if (!customElements.get('product-card-carousel')) {
         this.dataset.variantId = swatch.dataset.variantId;
 
         const image = this.querySelector('.card-product-carousel__image');
-        if (image && swatch.dataset.variantImage) {
-          image.src = swatch.dataset.variantImage;
+        if (image) {
+          image.src = swatch.dataset.variantImage || this.defaultImageSrc;
           image.srcset = '';
         }
 
