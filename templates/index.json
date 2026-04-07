@@ -48,9 +48,15 @@
         "mobile_content_alignment": "center",
         "show_text_below": false
       }
+    },
+    "product_card_carousel_rarMV7": {
+      "type": "product-card-carousel",
+      "name": "t:sections.product-card-carousel.presets.name",
+      "settings": {}
     }
   },
   "order": [
-    "image_banner"
+    "image_banner",
+    "product_card_carousel_rarMV7"
   ]
 }
