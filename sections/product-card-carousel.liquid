@@ -1,4 +1,5 @@
 {{ 'product-card-carousel.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-card-carousel.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
@@ -16,11 +17,32 @@
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient isolate">
-  <div class="page-width section-{{ section.id }}-padding">
+  <div class="product-card-carousel__container section-{{ section.id }}-padding">
     {%- if section.settings.title != blank -%}
       <h2 class="product-card-carousel__heading" style="text-align: {{ section.settings.heading_alignment }};">
         {{ section.settings.title }}
       </h2>
+    {%- endif -%}
+
+    {%- if section.settings.products.size > 0 -%}
+      <slider-component class="slider-mobile-gutter">
+        <ul
+          id="Slider-{{ section.id }}"
+          class="product-card-carousel__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--1-col-tablet-down slider slider--tablet grid--peek"
+          role="list"
+        >
+          {%- for product in section.settings.products -%}
+            <li
+              id="Slide-{{ section.id }}-{{ forloop.index }}"
+              class="product-card-carousel__item grid__item slider__slide"
+            >
+              {% render 'card-product-carousel',
+                product: product
+              %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </slider-component>
     {%- endif -%}
   </div>
 </div>
@@ -62,6 +84,24 @@
       "id": "products",
       "label": "t:sections.product-card-carousel.settings.products.label",
       "limit": 20
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.product-card-carousel.settings.columns_desktop.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5,
+      "label": "t:sections.product-card-carousel.settings.columns_mobile.label"
     },
     {
       "type": "header",

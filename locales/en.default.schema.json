@@ -2866,6 +2866,12 @@
         },
         "products": {
           "label": "Products"
+        },
+        "columns_desktop": {
+          "label": "Desktop columns"
+        },
+        "columns_mobile": {
+          "label": "Mobile columns"
         }
       },
       "presets": {
