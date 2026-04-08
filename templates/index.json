@@ -59,8 +59,10 @@
           "boots",
           "jumper",
           "dress",
-          "boots-2"
+          "boots-2",
+          "test-default-product"
         ],
+        "color_scheme": "",
         "show_color_swatches": true,
         "columns_desktop": 4,
         "columns_mobile": 1.5,
