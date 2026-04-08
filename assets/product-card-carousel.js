@@ -5,19 +5,18 @@ if (!customElements.get('product-card-carousel')) {
       constructor() {
         super();
         this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+        this.data = null;
       }
 
       connectedCallback() {
-        const img = this.querySelector('.card-product-carousel__image');
-        if (img) this.defaultImageSrc = img.src;
-
-        this.defaultDescription = this.dataset.defaultDescription || '';
-
         this.addEventListener('click', this.handleClick.bind(this));
+        this.bindSwatchListeners();
+      }
 
+      bindSwatchListeners() {
         this.querySelectorAll('.card-product-carousel__swatch input').forEach((input) => {
           input.addEventListener('change', () => {
-            this.handleSwatchClick(input.closest('.card-product-carousel__swatch'));
+            this.handleSwatchChange(input.closest('.card-product-carousel__swatch'));
           });
           input.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -36,29 +35,35 @@ if (!customElements.get('product-card-carousel')) {
         this.addToCart();
       }
 
-      handleSwatchClick(swatch) {
-        this.dataset.variantId = swatch.dataset.variantId;
+      async handleSwatchChange(swatch) {
+        const variantId = swatch.dataset.variantId;
 
-        const image = this.querySelector('.card-product-carousel__image');
-        if (image) {
-          image.src = swatch.dataset.variantImage || this.defaultImageSrc;
-          image.srcset = '';
+        try {
+          await this.loadCardData();
+          this.updateCard(variantId);
+        } catch (error) {
+          console.warn('Section Rendering API fetch failed:', error);
         }
+      }
 
-        const title = this.querySelector('.card-product-carousel__title');
-        if (title && swatch.dataset.variantTitle) {
-          title.textContent = swatch.dataset.variantTitle;
-        }
+      async loadCardData() {
+        if (this.data) return this.data;
 
-        const price = this.querySelector('.card-product-carousel__price');
-        if (price && swatch.dataset.variantPrice) {
-          price.textContent = swatch.dataset.variantPrice;
-        }
+        const productUrl = this.dataset.productUrl;
+        const response = await fetch(`${productUrl}?section_id=product-card-content`);
+        const text = await response.text();
 
-        const description = this.querySelector('.card-product-carousel__description');
-        if (description) {
-          description.textContent = swatch.dataset.variantDescription || this.defaultDescription;
-        }
+        this.data = new DOMParser().parseFromString(text, 'text/html');
+        return this.data;
+      }
+
+      updateCard(variantId) {
+        const variantCard = this.data.querySelector(`[data-variant-card="${variantId}"]`);
+        if (!variantCard) return;
+
+        this.dataset.variantId = variantId;
+        this.innerHTML = variantCard.innerHTML;
+        this.bindSwatchListeners();
       }
 
       addToCart() {

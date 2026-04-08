@@ -1,0 +1,18 @@
+{% layout none %}
+
+{%- for variant in product.variants -%}
+  <div data-variant-card="{{ variant.id }}">
+    {% render 'card-product-carousel',
+      product: product,
+      current_variant: variant,
+      show_color_swatches: true
+    %}
+  </div>
+{%- endfor -%}
+
+{% schema %}
+{
+  "name": "Product card content",
+  "settings": []
+}
+{% endschema %}

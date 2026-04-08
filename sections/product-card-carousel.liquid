@@ -27,10 +27,10 @@
     {%- endif -%}
 
     {%- if section.settings.products.size > 0 -%}
-      <slider-component class="slider-mobile-gutter">
+      <slider-component class="slider-mobile-gutter slider-component-desktop">
         <ul
           id="Slider-{{ section.id }}"
-          class="product-card-carousel__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--1-col-tablet-down slider slider--tablet grid--peek"
+          class="product-card-carousel__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--1-col-tablet-down slider slider--tablet slider--desktop grid--peek"
           role="list"
         >
           {%- for product in section.settings.products -%}
@@ -38,10 +38,12 @@
               id="Slide-{{ section.id }}-{{ forloop.index }}"
               class="product-card-carousel__item grid__item slider__slide"
             >
-              {% render 'card-product-carousel',
-                product: product,
-                show_color_swatches: section.settings.show_color_swatches
-              %}
+              <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
+                {% render 'card-product-carousel',
+                  product: product,
+                  show_color_swatches: section.settings.show_color_swatches
+                %}
+              </product-card-carousel>
             </li>
           {%- endfor -%}
         </ul>

@@ -149,6 +149,17 @@
   }
 }
 
+@media screen and (min-width: 990px) {
+  .product-card-carousel__grid.slider--desktop .slider__slide:first-child {
+    margin-left: 0;
+    scroll-margin-left: 0;
+  }
+
+  .product-card-carousel__grid.slider--desktop.grid--4-col-desktop .grid__item {
+    width: calc(25% - var(--grid-desktop-horizontal-spacing) * 3 / 4);
+  }
+}
+
 @media screen and (min-width: 1440px) {
   .card-product-carousel__media {
     width: 328px;

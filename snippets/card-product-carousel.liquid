@@ -1,23 +1,25 @@
 {%- if product != blank -%}
-  <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}" data-default-description="{{ product.description | strip_html | truncate: 60 | escape }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
+  {%- assign current_variant = current_variant | default: product.selected_or_first_available_variant -%}
+  {%- assign card_image = current_variant.featured_image | default: product.featured_media -%}
+
     <div class="card-product-carousel__media">
-      {%- if product.featured_media != blank -%}
+      {%- if card_image != blank -%}
         <img
           class="card-product-carousel__image"
           srcset="
-            {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-            {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-            {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-            {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-            {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
-            {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
-            {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+            {%- if card_image.width >= 165 -%}{{ card_image | image_url: width: 165 }} 165w,{%- endif -%}
+            {%- if card_image.width >= 360 -%}{{ card_image | image_url: width: 360 }} 360w,{%- endif -%}
+            {%- if card_image.width >= 533 -%}{{ card_image | image_url: width: 533 }} 533w,{%- endif -%}
+            {%- if card_image.width >= 720 -%}{{ card_image | image_url: width: 720 }} 720w,{%- endif -%}
+            {%- if card_image.width >= 940 -%}{{ card_image | image_url: width: 940 }} 940w,{%- endif -%}
+            {%- if card_image.width >= 1066 -%}{{ card_image | image_url: width: 1066 }} 1066w,{%- endif -%}
+            {{ card_image | image_url }} {{ card_image.width }}w
           "
-          src="{{ product.featured_media | image_url: width: 533 }}"
+          src="{{ card_image | image_url: width: 533 }}"
           sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc(100vw - 30px)"
-          alt="{{ product.featured_media.alt | escape }}"
-          width="{{ product.featured_media.width }}"
-          height="{{ product.featured_media.height }}"
+          alt="{{ card_image.alt | escape }}"
+          width="{{ card_image.width }}"
+          height="{{ card_image.height }}"
           loading="lazy"
         >
       {%- endif -%}
@@ -32,7 +34,7 @@
 
       <p class="card-product-carousel__title">{{ product.title }}</p>
 
-      {%- assign variant_description = product.selected_or_first_available_variant.metafields.custom.variant_short_description -%}
+      {%- assign variant_description = current_variant.metafields.custom.variant_short_description -%}
       {%- if variant_description != blank -%}
         <p class="card-product-carousel__description">{{ variant_description }}</p>
       {%- elsif product.description != blank -%}
@@ -40,7 +42,7 @@
       {%- endif -%}
 
       <div class="card-product-carousel__price-row">
-        <span class="card-product-carousel__price">{{ product.price | money_without_trailing_zeros }}</span>
+        <span class="card-product-carousel__price">{{ current_variant.price | money_without_trailing_zeros }}</span>
         <span class="card-product-carousel__rating">
           {% render 'icon-star' %}
           {%- if product.metafields.reviews.rating.value != blank -%}
@@ -74,24 +76,24 @@
                 {%- endif -%}
               {%- endfor -%}
               {%- capture swatch_id -%}carousel-{{ product.id }}-{{ color_option.position }}-{{ forloop.index0 }}{%- endcapture -%}
+              {%- assign is_checked = false -%}
+              {%- if variant_for_value.id == current_variant.id -%}
+                {%- assign is_checked = true -%}
+              {%- endif -%}
+              {%- assign option_disabled = true -%}
+              {%- if value.available -%}
+                {%- assign option_disabled = false -%}
+              {%- endif -%}
               <span class="card-product-carousel__swatch"
                 data-variant-id="{{ variant_for_value.id }}"
-                data-variant-title="{{ variant_for_value.title | escape }}"
-                data-variant-price="{{ variant_for_value.price | money_without_trailing_zeros }}"
-                {%- if variant_for_value.featured_image -%}
-                  data-variant-image="{{ variant_for_value.featured_image | image_url: width: 533 }}"
-                {%- endif -%}
-                {%- if variant_for_value.metafields.custom.variant_short_description != blank -%}
-                  data-variant-description="{{ variant_for_value.metafields.custom.variant_short_description | escape }}"
-                {%- endif -%}
               >
                 {% render 'swatch-input',
                   id: swatch_id,
                   name: product.id,
                   value: value,
                   swatch: value.swatch,
-                  checked: value.selected,
-                  visually_disabled: false
+                  checked: is_checked,
+                  visually_disabled: option_disabled
                 %}
               </span>
             {%- endfor -%}
@@ -102,5 +104,4 @@
         {%- endif -%}
       {%- endif -%}
     </div>
-  </product-card-carousel>
 {%- endif -%}
