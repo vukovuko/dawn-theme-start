@@ -104,6 +104,35 @@ product-carousel-swiper {
   height: 0;
 }
 
+.card-product-carousel__swatch .swatch-input__input + .swatch-input__label {
+  outline: none;
+  padding: 2px;
+  border: 1px solid transparent;
+}
+
+.card-product-carousel__swatch .swatch-input__input:checked + .swatch-input__label,
+.card-product-carousel__swatch .swatch-input__input:active + .swatch-input__label {
+  outline: none;
+  border-color: #111111;
+}
+
+.card-product-carousel__swatch .swatch-input__input + .swatch-input__label:hover,
+.card-product-carousel__swatch .swatch-input__input:hover + .swatch-input__label {
+  outline: none;
+  border-color: transparent;
+}
+
+.card-product-carousel__swatch .swatch-input__input:focus-visible + .swatch-input__label {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+.card-product-carousel__swatch .swatch-input__input:checked:focus-visible + .swatch-input__label,
+.card-product-carousel__swatch .swatch-input__input:active:focus-visible + .swatch-input__label {
+  outline: none;
+  border-color: #111111;
+}
+
 .card-product-carousel__swatches-more {
   font-size: 10px;
   line-height: 128%;
