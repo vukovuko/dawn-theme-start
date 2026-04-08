@@ -12,7 +12,8 @@
   margin: 0;
 }
 
-.product-card-carousel__swiper {
+product-carousel-swiper {
+  display: block;
   margin-top: 49px;
 }
 
