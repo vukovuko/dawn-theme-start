@@ -10,7 +10,7 @@ if (!customElements.get('product-carousel-swiper')) {
           this.swiper = new Swiper(this.querySelector('.swiper'), {
             modules: [Navigation, Pagination],
             slidesPerView: columnsMobile,
-            spaceBetween: 15,
+            spaceBetween: 20,
             breakpoints: {
               750: {
                 slidesPerView: 2,
@@ -104,6 +104,8 @@ if (!customElements.get('product-card-carousel')) {
         const variantId = this.dataset.variantId;
         if (!variantId || this.dataset.unavailable === 'true') return;
 
+        this.style.cursor = 'wait';
+
         const config = fetchConfig('javascript');
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
         delete config.headers['Content-Type'];
@@ -142,7 +144,8 @@ if (!customElements.get('product-card-carousel')) {
               this.cart.renderContents(response);
             }
           })
-          .catch((error) => console.error('Cart fetch error:', error));
+          .catch((error) => console.error('Cart fetch error:', error))
+          .finally(() => { this.style.cursor = 'pointer'; });
       }
     }
   );

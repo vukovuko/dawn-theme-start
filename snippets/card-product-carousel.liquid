@@ -32,7 +32,7 @@
         </span>
       {%- endif -%}
 
-      <p class="card-product-carousel__title">{{ product.title }}</p>
+      <p class="card-product-carousel__title">{{ product.title }}{% if current_variant.title != 'Default Title' %} - {{ current_variant.title }}{% endif %}</p>
 
       {%- assign variant_description = current_variant.metafields.custom.variant_short_description -%}
       {%- if variant_description != blank -%}
@@ -45,11 +45,13 @@
         <span class="card-product-carousel__price">{{ current_variant.price | money_without_trailing_zeros }}</span>
         <span class="card-product-carousel__rating">
           {% render 'icon-star' %}
-          {%- if product.metafields.reviews.rating.value != blank -%}
-            {{ product.metafields.reviews.rating.value.rating }}
-          {%- else -%}
-            4.5
-          {%- endif -%}
+          <span class="card-product-carousel__rating-value">
+            {%- if product.metafields.reviews.rating.value != blank -%}
+              {{ product.metafields.reviews.rating.value.rating }}
+            {%- else -%}
+              4.5
+            {%- endif -%}
+          </span>
         </span>
       </div>
       
@@ -98,7 +100,7 @@
               </span>
             {%- endfor -%}
             {%- if total_colors > max_swatches -%}
-              <span class="card-product-carousel__swatches-more">+ {{ total_colors | minus: max_swatches }} more colours</span>
+              <span class="card-product-carousel__swatches-more">+ {{ total_colors | minus: max_swatches }} <span class="card-product-carousel__swatches-more-text">more colours</span></span>
             {%- endif -%}
           </div>
         {%- endif -%}
