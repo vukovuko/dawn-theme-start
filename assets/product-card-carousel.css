@@ -86,8 +86,8 @@ product-carousel-swiper {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 9px;
-  margin-top: 10px;
+  gap: 1px;
+  margin-top: 6px;
 }
 
 .card-product-carousel__swatch {
