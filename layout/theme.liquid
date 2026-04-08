@@ -28,6 +28,24 @@
 
     {% render 'meta-tags' %}
 
+    <script>
+      window.loadSwiper = null;
+      window.initSwiper = function() {
+        if (!window.loadSwiper) {
+          window.loadSwiper = Promise.all([
+            import('https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.mjs'),
+            new Promise(function(resolve) {
+              var link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.href = 'https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css';
+              link.onload = resolve;
+              document.head.appendChild(link);
+            })
+          ]).then(function(results) { return results[0]; });
+        }
+        return window.loadSwiper;
+      };
+    </script>
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>

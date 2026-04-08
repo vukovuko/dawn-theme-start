@@ -1,5 +1,4 @@
 {{ 'product-card-carousel.css' | asset_url | stylesheet_tag }}
-{{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
 {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-card-carousel.js' | asset_url }}" defer="defer"></script>
@@ -27,27 +26,22 @@
     {%- endif -%}
 
     {%- if section.settings.products.size > 0 -%}
-      <slider-component class="slider-mobile-gutter slider-component-desktop">
-        <ul
-          id="Slider-{{ section.id }}"
-          class="product-card-carousel__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--1-col-tablet-down slider slider--tablet slider--desktop grid--peek"
-          role="list"
-        >
-          {%- for product in section.settings.products -%}
-            <li
-              id="Slide-{{ section.id }}-{{ forloop.index }}"
-              class="product-card-carousel__item grid__item slider__slide"
-            >
-              <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
-                {% render 'card-product-carousel',
-                  product: product,
-                  show_color_swatches: section.settings.show_color_swatches
-                %}
-              </product-card-carousel>
-            </li>
-          {%- endfor -%}
-        </ul>
-      </slider-component>
+      <product-carousel-swiper class="product-card-carousel__swiper" data-columns-desktop="{{ section.settings.columns_desktop }}" data-columns-mobile="{{ section.settings.columns_mobile }}">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            {%- for product in section.settings.products -%}
+              <div class="swiper-slide">
+                <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
+                  {% render 'card-product-carousel',
+                    product: product,
+                    show_color_swatches: section.settings.show_color_swatches
+                  %}
+                </product-card-carousel>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </product-carousel-swiper>
     {%- endif -%}
   </div>
 </div>

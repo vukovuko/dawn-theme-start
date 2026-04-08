@@ -1,3 +1,37 @@
+if (!customElements.get('product-carousel-swiper')) {
+  customElements.define(
+    'product-carousel-swiper',
+    class ProductCarouselSwiper extends HTMLElement {
+      connectedCallback() {
+        window.initSwiper().then(({ default: Swiper, Navigation, Pagination }) => {
+          const columnsDesktop = parseInt(this.dataset.columnsDesktop) || 4;
+          const columnsMobile = parseFloat(this.dataset.columnsMobile) || 1.5;
+
+          this.swiper = new Swiper(this.querySelector('.swiper'), {
+            modules: [Navigation, Pagination],
+            slidesPerView: columnsMobile,
+            spaceBetween: 15,
+            breakpoints: {
+              750: {
+                slidesPerView: 2,
+                spaceBetween: 16,
+              },
+              950: {
+                slidesPerView: 3,
+                spaceBetween: 16,
+              },
+              1300: {
+                slidesPerView: columnsDesktop,
+                spaceBetween: 16,
+              },
+            },
+          });
+        });
+      }
+    }
+  );
+}
+
 if (!customElements.get('product-card-carousel')) {
   customElements.define(
     'product-card-carousel',
