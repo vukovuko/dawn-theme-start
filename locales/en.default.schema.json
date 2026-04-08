@@ -2872,6 +2872,9 @@
         },
         "columns_mobile": {
           "label": "Mobile columns"
+        },
+        "show_color_swatches": {
+          "label": "Show color swatches"
         }
       },
       "presets": {

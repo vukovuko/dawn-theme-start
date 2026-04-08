@@ -1,5 +1,5 @@
 {%- if product != blank -%}
-  <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
+  <product-card-carousel class="card-product-carousel" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-product-url="{{ product.url }}" data-default-description="{{ product.description | strip_html | truncate: 60 | escape }}"{% unless product.selected_or_first_available_variant.available %} data-unavailable="true"{% endunless %}>
     <div class="card-product-carousel__media">
       {%- if product.featured_media != blank -%}
         <img
@@ -32,7 +32,10 @@
 
       <p class="card-product-carousel__title">{{ product.title }}</p>
 
-      {%- if product.description != blank -%}
+      {%- assign variant_description = product.selected_or_first_available_variant.metafields.custom.variant_short_description -%}
+      {%- if variant_description != blank -%}
+        <p class="card-product-carousel__description">{{ variant_description }}</p>
+      {%- elsif product.description != blank -%}
         <p class="card-product-carousel__description">{{ product.description | strip_html | truncate: 60 }}</p>
       {%- endif -%}
 
@@ -48,50 +51,55 @@
         </span>
       </div>
       
-      {%- assign color_option = nil -%}
-      {%- for option in product.options_with_values -%}
-        {%- assign option_name_lower = option.name | downcase -%}
-        {%- if option_name_lower == 'color' or option_name_lower == 'colour' -%}
-          {%- assign color_option = option -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-
-      {%- if color_option -%}
-        {%- assign max_swatches = 7 -%}
-        {%- assign total_colors = color_option.values.size -%}
-        <div class="card-product-carousel__swatches">
-          {%- for value in color_option.values limit: max_swatches -%}
-            {%- assign variant_for_value = nil -%}
-            {%- for v in product.variants -%}
-              {%- if v.options contains value -%}
-                {%- assign variant_for_value = v -%}
-                {%- break -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- capture swatch_id -%}carousel-{{ product.id }}-{{ color_option.position }}-{{ forloop.index0 }}{%- endcapture -%}
-            <span class="card-product-carousel__swatch"
-              data-variant-id="{{ variant_for_value.id }}"
-              data-variant-title="{{ variant_for_value.title | escape }}"
-              data-variant-price="{{ variant_for_value.price | money_without_trailing_zeros }}"
-              {%- if variant_for_value.featured_image -%}
-                data-variant-image="{{ variant_for_value.featured_image | image_url: width: 533 }}"
-              {%- endif -%}
-            >
-              {% render 'swatch-input',
-                id: swatch_id,
-                name: product.id,
-                value: value,
-                swatch: value.swatch,
-                checked: value.selected,
-                visually_disabled: false
-              %}
-            </span>
-          {%- endfor -%}
-          {%- if total_colors > max_swatches -%}
-            <span class="card-product-carousel__swatches-more">+ {{ total_colors | minus: max_swatches }} more colours</span>
+      {%- if show_color_swatches -%}
+        {%- assign color_option = nil -%}
+        {%- for option in product.options_with_values -%}
+          {%- assign option_name_lower = option.name | downcase -%}
+          {%- if option_name_lower == 'color' or option_name_lower == 'colour' -%}
+            {%- assign color_option = option -%}
+            {%- break -%}
           {%- endif -%}
-        </div>
+        {%- endfor -%}
+
+        {%- if color_option -%}
+          {%- assign max_swatches = 7 -%}
+          {%- assign total_colors = color_option.values.size -%}
+          <div class="card-product-carousel__swatches">
+            {%- for value in color_option.values limit: max_swatches -%}
+              {%- assign variant_for_value = nil -%}
+              {%- for v in product.variants -%}
+                {%- if v.options contains value -%}
+                  {%- assign variant_for_value = v -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- capture swatch_id -%}carousel-{{ product.id }}-{{ color_option.position }}-{{ forloop.index0 }}{%- endcapture -%}
+              <span class="card-product-carousel__swatch"
+                data-variant-id="{{ variant_for_value.id }}"
+                data-variant-title="{{ variant_for_value.title | escape }}"
+                data-variant-price="{{ variant_for_value.price | money_without_trailing_zeros }}"
+                {%- if variant_for_value.featured_image -%}
+                  data-variant-image="{{ variant_for_value.featured_image | image_url: width: 533 }}"
+                {%- endif -%}
+                {%- if variant_for_value.metafields.custom.variant_short_description != blank -%}
+                  data-variant-description="{{ variant_for_value.metafields.custom.variant_short_description | escape }}"
+                {%- endif -%}
+              >
+                {% render 'swatch-input',
+                  id: swatch_id,
+                  name: product.id,
+                  value: value,
+                  swatch: value.swatch,
+                  checked: value.selected,
+                  visually_disabled: false
+                %}
+              </span>
+            {%- endfor -%}
+            {%- if total_colors > max_swatches -%}
+              <span class="card-product-carousel__swatches-more">+ {{ total_colors | minus: max_swatches }} more colours</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       {%- endif -%}
     </div>
   </product-card-carousel>

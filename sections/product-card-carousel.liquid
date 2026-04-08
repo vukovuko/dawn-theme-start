@@ -39,7 +39,8 @@
               class="product-card-carousel__item grid__item slider__slide"
             >
               {% render 'card-product-carousel',
-                product: product
+                product: product,
+                show_color_swatches: section.settings.show_color_swatches
               %}
             </li>
           {%- endfor -%}
@@ -86,6 +87,12 @@
       "id": "products",
       "label": "t:sections.product-card-carousel.settings.products.label",
       "limit": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "default": true,
+      "label": "t:sections.product-card-carousel.settings.show_color_swatches.label"
     },
     {
       "type": "range",

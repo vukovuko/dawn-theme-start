@@ -11,6 +11,8 @@ if (!customElements.get('product-card-carousel')) {
         const img = this.querySelector('.card-product-carousel__image');
         if (img) this.defaultImageSrc = img.src;
 
+        this.defaultDescription = this.dataset.defaultDescription || '';
+
         this.addEventListener('click', this.handleClick.bind(this));
 
         this.querySelectorAll('.card-product-carousel__swatch input').forEach((input) => {
@@ -51,6 +53,11 @@ if (!customElements.get('product-card-carousel')) {
         const price = this.querySelector('.card-product-carousel__price');
         if (price && swatch.dataset.variantPrice) {
           price.textContent = swatch.dataset.variantPrice;
+        }
+
+        const description = this.querySelector('.card-product-carousel__description');
+        if (description) {
+          description.textContent = swatch.dataset.variantDescription || this.defaultDescription;
         }
       }
 
