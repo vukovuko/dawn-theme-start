@@ -32,7 +32,7 @@
         </span>
       {%- endif -%}
 
-      <p class="card-product-carousel__title">{{ product.title }}{% if current_variant.title != 'Default Title' %} - {{ current_variant.title }}{% endif %}</p>
+      <p class="card-product-carousel__title">{{ product.title }}{% unless product.has_only_default_variant %} - {{ current_variant.title }}{% endunless %}</p>
 
       {%- assign variant_description = current_variant.metafields.custom.variant_short_description -%}
       {%- if variant_description != blank -%}

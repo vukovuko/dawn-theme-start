@@ -142,7 +142,6 @@ product-carousel-swiper {
 .card-product-carousel__swatch .swatch-input__input + .swatch-input__label:hover,
 .card-product-carousel__swatch .swatch-input__input:hover + .swatch-input__label {
   outline: none;
-  border-color: transparent;
 }
 
 .card-product-carousel__swatch .swatch-input__input:focus-visible + .swatch-input__label {
